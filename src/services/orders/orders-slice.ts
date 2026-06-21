@@ -6,7 +6,7 @@ import {
   getFeedsThunk,
   getOrderByNumberThunk,
   getUserOrdersThunk,
-  postUserBurderThunk
+  postUserBurgerThunk
 } from './orders-actions';
 import { TFeedsResponse } from '@api';
 
@@ -79,20 +79,20 @@ export const ordersSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      .addCase(postUserBurderThunk.pending, (state) => {
+      .addCase(postUserBurgerThunk.pending, (state) => {
         state.loading = true;
         state.orderRequest = true;
         state.error = null;
       })
-      .addCase(postUserBurderThunk.fulfilled, (state, action) => {
+      .addCase(postUserBurgerThunk.fulfilled, (state, action) => {
         state.loading = false;
         state.orderRequest = false;
         state.newOrder = {
-          order: action.payload.order,
+          order: action.payload.order as unknown as TOrder,
           name: action.payload.name
         };
       })
-      .addCase(postUserBurderThunk.rejected, (state, action) => {
+      .addCase(postUserBurgerThunk.rejected, (state, action) => {
         state.loading = false;
         state.orderRequest = false;
         state.error = action.payload as string;

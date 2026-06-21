@@ -32,7 +32,7 @@ export const getOrderByNumberThunk = createAsyncThunk(
   }
 );
 
-export const postUserBurderThunk = createAsyncThunk(
+export const postUserBurgerThunk = createAsyncThunk(
   'order/postUserBurger',
   async (userBurgerIngredients: string[], { rejectWithValue }) => {
     try {

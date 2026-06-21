@@ -2,40 +2,33 @@ import { Navigate, useLocation } from 'react-router-dom';
 import React from 'react';
 import { useSelector } from '../../services/store';
 import { Preloader } from '@ui';
-import {
-  selectIsAuthChecked,
-  selectUser
-} from '../../services/user/user-slice';
+import { selectUserLoading, selectUser } from '../../services/user/user-slice';
 
 interface ProtectedRouteProps {
   children: React.ReactElement;
-  IsAuth?: boolean; // true - только для неавторизованных, false - только для авторизованных
+  isAuth?: boolean;
 }
 
 export const ProtectedRoute = ({
   children,
-  IsAuth = false
+  isAuth = false
 }: ProtectedRouteProps) => {
-  const isAuthChecked = useSelector(selectIsAuthChecked);
+  const isAuthLoading = useSelector(selectUserLoading);
   const user = useSelector(selectUser);
   const location = useLocation();
 
-  if (!isAuthChecked) {
+  if (isAuthLoading) {
     return <Preloader />;
   }
 
-  if (IsAuth) {
-    if (!user) {
-      return children;
-    }
-
-    const from = location.state?.from?.pathname || '/';
-    return <Navigate to={from} replace />;
+  if (!isAuth && !user) {
+    return <Navigate replace to='/login' state={{ from: location }} />;
   }
 
-  if (user) {
-    return children;
+  if (isAuth && user) {
+    const from = location.state?.from || { pathname: '/' };
+    return <Navigate replace to={from} />;
   }
 
-  return <Navigate to='/login' state={{ from: location }} replace />;
+  return children;
 };
