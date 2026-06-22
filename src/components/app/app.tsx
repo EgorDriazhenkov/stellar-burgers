@@ -111,37 +111,47 @@ const App = () => {
         <Route path='*' element={<NotFound404 />} />
         <Route path='/feed/:number' element={<OrderInfo />} />
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
-        <Route path='/profile/orders/:number' element={<OrderInfo />} />
-      </Routes>
-
-      <Routes>
-        <Route
-          path='/feed/:number'
-          element={
-            <Modal title={''} onClose={onCloseModal}>
-              <OrderInfo />
-            </Modal>
-          }
-        />
-
-        <Route
-          path='/ingredients/:id'
-          element={
-            <Modal title={'Детали ингредиента'} onClose={onCloseModal}>
-              <IngredientDetails />
-            </Modal>
-          }
-        />
-
         <Route
           path='/profile/orders/:number'
           element={
-            <Modal title={''} onClose={onCloseModal}>
+            <ProtectedRoute>
               <OrderInfo />
-            </Modal>
+            </ProtectedRoute>
           }
         />
       </Routes>
+      {backgroundLocation && (
+        <Routes>
+          <Route
+            path='/feed/:number'
+            element={
+              <Modal title={''} onClose={onCloseModal}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+
+          <Route
+            path='/ingredients/:id'
+            element={
+              <Modal title={'Детали ингредиента'} onClose={onCloseModal}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <Modal title={''} onClose={onCloseModal}>
+                <ProtectedRoute>
+                  <OrderInfo />
+                </ProtectedRoute>
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
     </div>
   );
 };

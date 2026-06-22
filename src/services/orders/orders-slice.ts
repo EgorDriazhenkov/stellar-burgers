@@ -19,6 +19,7 @@ export interface OrderState {
     name: string;
   };
   orderRequest: boolean;
+  orderSuccess: boolean;
   loading: boolean;
   error: string | null;
 }
@@ -37,6 +38,7 @@ const initialState: OrderState = {
     name: ''
   },
   orderRequest: false,
+  orderSuccess: false,
   loading: false,
   error: null
 };
@@ -48,6 +50,9 @@ export const ordersSlice = createSlice({
     setNewOrder: (state, action) => {
       state.orderRequest = action.payload;
       state.newOrder.order = null;
+    },
+    resetOrderSuccess: (state) => {
+      state.orderSuccess = false;
     }
   },
   extraReducers: (builder) => {
@@ -82,11 +87,13 @@ export const ordersSlice = createSlice({
       .addCase(postUserBurgerThunk.pending, (state) => {
         state.loading = true;
         state.orderRequest = true;
+        state.orderSuccess = false;
         state.error = null;
       })
       .addCase(postUserBurgerThunk.fulfilled, (state, action) => {
         state.loading = false;
         state.orderRequest = false;
+        state.orderSuccess = true;
         state.newOrder = {
           order: action.payload.order as unknown as TOrder,
           name: action.payload.name
@@ -95,6 +102,7 @@ export const ordersSlice = createSlice({
       .addCase(postUserBurgerThunk.rejected, (state, action) => {
         state.loading = false;
         state.orderRequest = false;
+        state.orderSuccess = false;
         state.error = action.payload as string;
       })
 
@@ -118,7 +126,8 @@ export const ordersSlice = createSlice({
     selectFeed: (state) => state.feed,
     selectNewOrder: (state) => state.newOrder,
     selectOrderRequest: (state) => state.orderRequest,
-    selectUserOrders: (state) => state.userOrders
+    selectUserOrders: (state) => state.userOrders,
+    selectOrderSuccess: (state) => state.orderSuccess
   }
 });
 
@@ -129,8 +138,9 @@ export const {
   selectFeed,
   selectNewOrder,
   selectOrderRequest,
-  selectUserOrders
+  selectUserOrders,
+  selectOrderSuccess
 } = ordersSlice.selectors;
 
 export const ordersReducer = ordersSlice.reducer;
-export const { setNewOrder } = ordersSlice.actions;
+export const { setNewOrder, resetOrderSuccess } = ordersSlice.actions;
