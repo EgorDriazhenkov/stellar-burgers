@@ -24,7 +24,7 @@ export interface OrderState {
   error: string | null;
 }
 
-const initialState: OrderState = {
+export const initialState: OrderState = {
   feed: {
     success: false,
     total: 0,

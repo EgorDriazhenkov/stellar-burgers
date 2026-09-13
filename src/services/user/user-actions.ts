@@ -30,7 +30,7 @@ export const loginUserThunk = createAsyncThunk(
     try {
       return await loginUserApi(loginData);
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Ошибка входа (логина)');
+      return rejectWithValue(error.message || 'Ошибка входа');
     }
   }
 );
