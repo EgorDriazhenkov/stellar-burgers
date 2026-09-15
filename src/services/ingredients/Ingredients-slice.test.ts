@@ -1,16 +1,15 @@
-import { ingredientsReducer } from './ingredients-slice';
+import { ingredientsReducer, initialState  } from './ingredients-slice';
 import { getIngredientsThunk } from './ingredienst-actions';
 import { testIngredients } from '../../mocks/test-data';
 
-describe('ingredient-slice', () => {
-  const initialState = {
-    ingredients: [],
-    loading: false,
-    error: null
-  };
 
-  it('pending: включает loading и сбрасывает error', () => {
-    const prevState = { ...initialState, error: 'Очень опасная и страшная ошибка' };
+describe('ingredient-slice', () => {
+
+  test('pending: включает loading и сбрасывает error', () => {
+    const prevState = {
+      ...initialState,
+      error: 'Очень опасная и страшная ошибка'
+    };
 
     const state = ingredientsReducer(
       prevState,
@@ -19,10 +18,10 @@ describe('ingredient-slice', () => {
 
     expect(state.loading).toBe(true);
     expect(state.error).toBeNull();
-    expect(state.ingredients).toEqual([]); 
+    expect(state.ingredients).toEqual([]);
   });
 
-  it('fulfilled: сохраняет данные и выключает loading', () => {
+  test('fulfilled: сохраняет данные и выключает loading', () => {
     const prevState = { ingredients: [], loading: true, error: null };
 
     const state = ingredientsReducer(
@@ -35,7 +34,7 @@ describe('ingredient-slice', () => {
     expect(state.error).toBeNull();
   });
 
-  it('rejected: сохраняет ошибку и выключает loading', () => {
+  test('rejected: сохраняет ошибку и выключает loading', () => {
     const prevState = { ingredients: [], loading: true, error: null };
 
     const state = ingredientsReducer(
@@ -45,7 +44,12 @@ describe('ingredient-slice', () => {
 
     expect(state.loading).toBe(false);
     expect(state.error).toBe('Ошибка');
-    
+
     expect(state.ingredients).toEqual([]);
   });
-})
+
+  test('Неизвестный action возвращает initialState', () => {
+    const state = ingredientsReducer(undefined, { type: 'unknow' });
+    expect(state).toEqual(initialState);
+  });
+});

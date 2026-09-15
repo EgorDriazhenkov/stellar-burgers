@@ -20,12 +20,11 @@ jest.mock('../../utils/cookie', () => ({
 }));
 
 describe('userSlice', () => {
-
   test('setUser: сохраняет пользователя', () => {
     const state = userReducer(initialState, setUser(testUser));
     expect(state.user).toEqual(testUser);
   });
- test('setIsAuthChecked: меняет значение isAuthChecked', () => {
+  test('setIsAuthChecked: меняет значение isAuthChecked', () => {
     const state = userReducer(initialState, setIsAuthChecked(true));
     expect(state.isAuthChecked).toBe(true);
   });
@@ -91,15 +90,15 @@ describe('userSlice', () => {
     expect(state.error).toBe('Ошибка обновления');
   });
 
-it('logoutUserThunk.fulfilled: сбрасывает user', () => {
-  const state = userReducer(
-    { ...initialState, loading: true, user: testUser, isAuthChecked: true },
-    logoutUserThunk.fulfilled({ success: true }, 'id', undefined)  
-  );
+  it('logoutUserThunk.fulfilled: сбрасывает user', () => {
+    const state = userReducer(
+      { ...initialState, loading: true, user: testUser, isAuthChecked: true },
+      logoutUserThunk.fulfilled({ success: true }, 'id', undefined)
+    );
 
-  expect(state.loading).toBe(false);
-  expect(state.user).toBeNull();
-});
+    expect(state.loading).toBe(false);
+    expect(state.user).toBeNull();
+  });
 
   it('logoutUserThunk.rejected: ошибка', () => {
     const state = userReducer(
@@ -108,5 +107,10 @@ it('logoutUserThunk.fulfilled: сбрасывает user', () => {
     );
 
     expect(state.error).toBe('Ошибка');
+  });
+
+  test('Неизвестный action возвращает initialState', () => {
+    const state = userReducer(undefined, { type: 'unknow' });
+    expect(state).toEqual(initialState);
   });
 });

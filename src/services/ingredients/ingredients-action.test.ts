@@ -1,10 +1,10 @@
 import { testIngredients } from '../../mocks/test-data';
 import { getIngredientsThunk } from './ingredienst-actions';
-import * as api from '@api';;
+import * as api from '@api';
 
 describe('getIngredientsThunk', () => {
   afterEach(() => {
-    jest.restoreAllMocks(); 
+    jest.restoreAllMocks();
   });
 
   const runThunk = async () => {
@@ -31,7 +31,9 @@ describe('getIngredientsThunk', () => {
   });
 
   test('Запрос с ошибкой', async () => {
-    jest.spyOn(api, 'getIngredientsApi').mockRejectedValue(new Error('Ошибка запроса данных'));
+    jest
+      .spyOn(api, 'getIngredientsApi')
+      .mockRejectedValue(new Error('Ошибка запроса данных'));
 
     const dispatch = await runThunk();
 

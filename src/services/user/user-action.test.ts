@@ -27,24 +27,26 @@ describe('user-actions', () => {
     return dispatch;
   };
 
- it('registerUserThunk: успех', async () => {
-  const spy = jest
-    .spyOn(api, 'registerUserApi')
-    .mockResolvedValue(testAuthResponse);
+  it('registerUserThunk: успех', async () => {
+    const spy = jest
+      .spyOn(api, 'registerUserApi')
+      .mockResolvedValue(testAuthResponse);
 
-  const dispatch = await runThunk(registerUserThunk(testRegisterData));
+    const dispatch = await runThunk(registerUserThunk(testRegisterData));
 
-  expect(spy).toHaveBeenCalledWith(testRegisterData);
-  expect(dispatch).toHaveBeenCalledWith(
-    expect.objectContaining({
-      type: registerUserThunk.fulfilled.type,
-      payload: testAuthResponse
-    })
-  );
-});
+    expect(spy).toHaveBeenCalledWith(testRegisterData);
+    expect(dispatch).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: registerUserThunk.fulfilled.type,
+        payload: testAuthResponse
+      })
+    );
+  });
 
   it('registerUserThunk: ошибка', async () => {
-    jest.spyOn(api, 'registerUserApi').mockRejectedValue(new Error('Email занят'));
+    jest
+      .spyOn(api, 'registerUserApi')
+      .mockRejectedValue(new Error('Email занят'));
 
     const dispatch = await runThunk(registerUserThunk(testRegisterData));
 
@@ -150,7 +152,7 @@ describe('user-actions', () => {
 
     const dispatch = jest.fn();
     await checkUserAuth()(dispatch, () => ({}), undefined);
-    await new Promise((r) => setTimeout(r, 0)); 
+    await new Promise((r) => setTimeout(r, 0));
 
     expect(dispatch).toHaveBeenCalledWith(setUser(testUser));
   });

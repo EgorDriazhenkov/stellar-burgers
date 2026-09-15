@@ -83,4 +83,9 @@ describe('ordersSlice', () => {
     expect(state.loading).toBe(false);
     expect(state.error).toBe('Ошибка');
   });
+
+  test('Неизвестный action возвращает initialState', () => {
+      const state = ordersReducer(undefined, { type: 'unknow' });
+      expect(state).toEqual(initialState);
+  });
 });

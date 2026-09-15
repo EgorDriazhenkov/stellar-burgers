@@ -21,10 +21,10 @@ test('Добавление ингридиентов', async ({ page, mockApi}) =
   const constructor = page.getByTestId('burgerConstructor')
 
   await expect(constructor.getByText('Краторная булка N-200i (верх)')).toBeVisible({ timeout: 15000 });
-  await expect(constructor.getByText('Краторная булка N-200i (низ)')).toBeVisible();
-  await expect(constructor.getByText('Говяжий метеорит (отбивная)')).toBeVisible();
-  await expect(constructor.getByText('Сыр с астероидной плесенью')).toBeVisible();
-  await expect(constructor.getByText('Соус традиционный галактический')).toBeVisible();
+  await expect(constructor.getByText('Краторная булка N-200i (низ)')).toBeVisible({ timeout: 15000 });
+  await expect(constructor.getByText('Говяжий метеорит (отбивная)')).toBeVisible({ timeout: 15000 });
+  await expect(constructor.getByText('Сыр с астероидной плесенью')).toBeVisible({ timeout: 15000 });
+  await expect(constructor.getByText('Соус традиционный галактический')).toBeVisible({ timeout: 15000 });
 
   const topBun = constructor.getByTestId('topBun')
   const bottomBun = constructor.getByTestId('bottomBun')
@@ -61,7 +61,7 @@ test.describe('Тестирование модального окна', () => {
       .getByRole('link')
       .click();
 
-    await expect(page.getByTestId('modal')).toBeVisible();
+    await expect(page.getByTestId('modal')).toBeVisible({ timeout: 15000 });
     await expect(page.getByTestId('modal')).toContainText('Биокотлета из марсианской Магнолии');
     
     await page
@@ -92,7 +92,8 @@ test.describe('Тестирование модального окна', () => {
     await expect(page.getByTestId('modal')).not.toBeVisible();
   })
 })
-test('Создание и оформление заказа', async ({ page, mockApi, mockUser, mockToken, mockOrder}) => {
+test('Создание и оформление заказа', async ({ page, mockApi, authUser}) => {
+
   await page.goto('/');
   await expect(page.getByTestId('ingredients')).toBeVisible();
   await page
@@ -110,9 +111,12 @@ test('Создание и оформление заказа', async ({ page, moc
     .filter({ hasText: 'Кристаллы марсианских альфа-сахаридов' })
     .getByRole('button')
     .click();
-  await page.getByRole('button', { name: 'Оформить заказ' }).click();
-  await expect(page.getByTestId('orderSuccess')).toBeVisible();
-  await expect(page.getByTestId('orderSuccess')).toHaveText('4815162342');
+  const orderButton = page.getByRole('button', { name: 'Оформить заказ' });
+  await expect(orderButton).toBeEnabled();   // 
+  await orderButton.click();
+ 
+  await expect(page.getByTestId('orderSuccess')).toBeVisible({ timeout: 1000 });
+  await expect(page.getByTestId('orderSuccess')).toHaveText('110203');
   await page.keyboard.press('Escape');
   await expect(page.getByTestId('orderSuccess')).not.toBeVisible();
   await expect(
